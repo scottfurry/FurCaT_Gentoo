@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>scott.wl.furry@gmail.com</email>
+    <name>Scott Furry</name>
+  </maintainer>
+  <longdescription lang="en">
+QRCodeGen is a high quality QR Code generator library for Python 2 and 3.
+</longdescription>
+  <upstream>
+    <remote-id type="pypi">qrcodegen</remote-id>
+    <remote-id type="github">nayuki/QR-Code-generator</remote-id>
+  </upstream>
+</pkgmetadata>
