@@ -71,11 +71,10 @@ python_install_all() {
 	insinto /usr/share/${MY_PN}
 	doins -r "${WORKDIR}/${CARD_BASE}/"*
 
-	dosym /usr/share/doc/${PF}/html /usr/share/${MY_PN}/html
-
 	doman docs/*.6
 	DOCS=( README.md AUTHORS.md docs/README docs/README.SOURCE )
-	HTML_DOCS=( "${S}"/html-src/html/* )
-	einstalldocs
+	HTML_DOCS=( html-src/html/* )
+	dosym /usr/share/doc/${P}/html /usr/share/${MY_PN}/html
+
 	distutils-r1_python_install_all
 }
