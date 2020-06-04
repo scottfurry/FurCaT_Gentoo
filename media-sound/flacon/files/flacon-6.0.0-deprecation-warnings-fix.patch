@@ -1,0 +1,109 @@
+diff --git a/gui/configdialog/configdialog.cpp b/gui/configdialog/configdialog.cpp
+index c40e3ee..b45c59d 100644
+--- a/gui/configdialog/configdialog.cpp
++++ b/gui/configdialog/configdialog.cpp
+@@ -28,6 +28,7 @@
+ #include "../icon.h"
+ #include "addprofiledialog.h"
+ 
++#include <QtGlobal>
+ #include <QFileDialog>
+ #include <QDebug>
+ #include <QDateTime>
+@@ -188,7 +189,14 @@ void ConfigDialog::initProgramsPage()
+ #else
+ void ConfigDialog::initProgramsPage()
+ {
++#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+     QStringList progs = QStringList::fromSet(Settings::i()->programs());
++#else
++    // After 5.14.0, QT has stated range constructors are available and preferred.
++    // See: https://doc.qt.io/qt-5/qlist.html#fromSet
++    QSet<QString> program_set = Settings::i()->programs();
++    QStringList progs = QStringList(program_set.begin(), program_set.end());
++#endif
+     progs.sort();
+ 
+     int row = 0;
+diff --git a/gui/controls.cpp b/gui/controls.cpp
+index d606c40..4d2b848 100644
+--- a/gui/controls.cpp
++++ b/gui/controls.cpp
+@@ -30,6 +30,7 @@
+ #include "icon.h"
+ #include "patternexpander.h"
+ 
++#include <QtGlobal>
+ #include <QMenu>
+ #include <QDebug>
+ #include <QTextCodec>
+@@ -489,7 +490,14 @@ void MultiValuesSpinBox::stepBy(int steps)
+ 
+     lineEdit()->setModified(true);
+     emit valueChanged(this->value());
++#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
++    // valueChanged marked deprecated after version 5.14.x
+     emit valueChanged(lineEdit()->text());
++#else
++    // replacement for QSpinBox:valueChanged(QString)
++    // https://doc.qt.io/qt-5/qspinbox.html#textChanged
++    emit textChanged(lineEdit()->text());
++#endif
+ }
+ 
+ 
+@@ -589,7 +597,13 @@ void MultiValuesLineEdit::setMultiValue(QSet<QString> value)
+         mMultiState = MultiValuesEmpty;
+         QLineEdit::setText(*(value.constBegin()));
+         setPlaceholderText("");
++#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+         mCompleterModel->setStringList(value.toList());
++#else
++        // After 5.14.0, QT has stated range constructors are available and preferred.
++        // See: https://doc.qt.io/qt-5/qset.html#toList
++        mCompleterModel->setStringList(QStringList(value.begin(), value.end()));
++#endif
+     }
+ 
+     else
+@@ -597,7 +611,13 @@ void MultiValuesLineEdit::setMultiValue(QSet<QString> value)
+         mMultiState = MultiValuesMulti;
+         QLineEdit::setText("");
+         setPlaceholderText(tr("Multiple values"));
++#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+         mCompleterModel->setStringList(value.toList());
++#else
++        // After 5.14.0, QT has stated range constructors are available and preferred.
++        // See: https://doc.qt.io/qt-5/qset.html#toList
++        mCompleterModel->setStringList(QStringList(value.begin(), value.end()));
++#endif
+     }
+ }
+ 
+diff --git a/settings.cpp b/settings.cpp
+index 95e6a68..52322b9 100644
+--- a/settings.cpp
++++ b/settings.cpp
+@@ -32,6 +32,7 @@
+ #include "converter/resampler.h"
+ 
+ #include <assert.h>
++#include <QtGlobal>
+ #include <QDir>
+ #include <QDebug>
+ #include <QProcessEnvironment>
+@@ -569,7 +570,14 @@ void Settings::setProfiles(const Profiles &profiles)
+ {
+     allKeys();
+     beginGroup(PROFILES_PREFIX);
++#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+     QSet<QString> old = QSet<QString>::fromList(childGroups());
++#else
++    // After 5.14.0, QT has stated range constructors are available and preferred.
++    // See: https://doc.qt.io/qt-5/qset.html#toList
++    QList<QString> groups = childGroups();
++    QSet<QString> old = QSet<QString>(groups.begin(), groups.end());
++#endif
+ 
+     for (const Profile &profile: profiles) {
+         old.remove(profile.id());
