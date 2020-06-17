@@ -16,8 +16,8 @@ if [[ ${PV} == 9999 ]] ; then
     KEYWORDS=""
     S="${WORKDIR}/${PN}"
 else
-    SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-    KEYWORDS="amd64 x86"
+    SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+    KEYWORDS="~amd64 ~x86"
 fi
 
 LICENSE="GPL-3 MPL-2.0"
