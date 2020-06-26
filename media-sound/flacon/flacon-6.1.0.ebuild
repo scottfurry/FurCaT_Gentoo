@@ -38,8 +38,7 @@ DEPEND="${RDEPEND}
 		media-sound/wavpack
 	)
 "
-PATCHES=( "${FILESDIR}/${PN}-5.5.1-rm-gzip-cmd.patch"
-	  "${FILESDIR}/${P}-deprecation-warnings-fix.patch" )
+PATCHES=( "${FILESDIR}/${PN}-5.5.1-rm-gzip-cmd.patch" )
 
 CMAKE_BUILD_TYPE=Release
 
