@@ -48,7 +48,7 @@ RDEPEND="
 	media-libs/x264:=
 	media-sound/lame
 	sys-libs/zlib
-	>=media-video/ffmpeg-4.2.1:0=[fdk?]
+	>=media-video/ffmpeg-4.2.1:0=[postproc,fdk?]
 	gstreamer? (
 		media-libs/gstreamer:1.0
 		media-libs/gst-plugins-base:1.0
@@ -88,11 +88,11 @@ PATCHES=(
 	# Remove faac dependency; TODO: figure out if we need to do this at all.
 	"${FILESDIR}/${PN}-9999-remove-faac-dependency.patch"
 
-	# Fix missing x265 link flag
-	"${FILESDIR}/${PN}-1.3.1-missing-linker-flags.patch"
-
-	# Allow disabling nvenc etc
+	# Use whichever python is set by portage
 	"${FILESDIR}/${PN}-1.3.0-dont-search-for-python.patch"
+
+	# Fix x265 linkage... again #724650
+	"${FILESDIR}/${PN}-1.3.2-x265-link.patch"
 )
 
 src_prepare() {
