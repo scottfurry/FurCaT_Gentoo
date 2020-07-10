@@ -45,6 +45,7 @@ src_unpack() {
 }
 
 src_install() {
+	pax-mark m "${MY_INSTALL_DIR}/${MY_EXEC}"
 	insinto "${MY_INSTALL_DIR}"
 	doins -r *
 	dosym "${MY_INSTALL_DIR}/${MY_EXEC}" "/usr/bin/${PN}"
@@ -57,13 +58,14 @@ src_install() {
 	fperms +x "${MY_INSTALL_DIR}/libEGL.so"
 	fperms +x "${MY_INSTALL_DIR}/libGLESv2.so"
 	fperms +x "${MY_INSTALL_DIR}/libffmpeg.so"
-
+	fperms +x "${MY_INSTALL_DIR}/resources/app/extensions/git/dist/askpass.sh"
 	#fix Spawn EACESS bug #25848
 	fperms +x "${MY_INSTALL_DIR}/resources/app/node_modules.asar.unpacked/vscode-ripgrep/bin/rg"
-	insinto "/usr/share/licenses/${PN}"
-	newins "${S}/resources/app/LICENSE.txt" "LICENSE.txt"
 
-	pax-mark m "${MY_INSTALL_DIR}/${MY_EXEC}"
+	insinto "/usr/share/licenses/${PN}"
+	for i in resources/app/LICEN*; do
+		newins "${i}" "$(basename ${i})"
+	done
 }
 
 pkg_postinst() {
