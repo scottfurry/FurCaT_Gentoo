@@ -4,7 +4,7 @@
 
 EAPI=7
 
-inherit desktop eutils unpacker pax-utils xdg
+inherit desktop eutils unpacker xdg
 
 MY_PN="${PN/-bin}"
 MY_INSTALL_DIR="/opt/balenaEtcher"
@@ -33,30 +33,41 @@ RDEPEND="
         dev-libs/nss
 "
 
+S="${WORKDIR}/${P}"
+
+QA_PREBUILT="
+	opt/${MY_PN}/*.so
+	opt/${MY_PN}/*.bin
+	opt/${MY_PN}/*.pak
+	opt/${MY_PN}/resources/app/generated/modules/*
+        opt/${MY_PN}/chrome-sandbox
+        opt/${MY_PN}/${MY_EXEC}
+"
+
 src_unpack() {
-	# etcher does not use a containing folder(deb archive)
+	# deb archive does not use a containing folder
 	# manual intervention required
-        install -d "${WORKDIR}/${P}"
-        S="${WORKDIR}/${P}"
+        install -d "${S}"
 	cd "${S}" || die "cd into target directory ${S} failed"
 	unpack_deb "${A}"
 }
 
+src_prepare() {
+        default
+        rm usr/share/applications/${MY_EXEC}.desktop || die
+	# only contains changelog"
+	rm -rf usr/share/doc || die
+}
+
 src_install() {
 	doins -r *
-        dosym "${MY_INSTALL_DIR}/${MY_EXEC}" "/usr/bin/${MY_PN}" || die
         make_wrapper "${MY_PN}" "${MY_INSTALL_DIR}/${MY_EXEC}" || die
-	# only contains changelog"
-	rm -rf "${D}/usr/share/doc" || die
 	# use own desktop file
-	rm -fR "${D}/usr/share/applications" || die
 	domenu "${FILESDIR}/${MY_PN}.desktop" || die
-
 	# correct permissions of install components
 	fperms 4755 "${MY_INSTALL_DIR}/chrome-sandbox" || die
 	fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}" || die
 	fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}.bin" || die
-	pax-mark m "${MY_INSTALL_DIR}/${MY_EXEC}" || die
 }
 
 pkg_postinst() {
