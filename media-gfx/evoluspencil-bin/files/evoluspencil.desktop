@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Pencil
+Exec=evoluspencil %f
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=evoluspencil
+StartupWMClass=EvolusPencil
+Comment=An open-source GUI prototyping tool that is available for ALL platforms.
+Categories=Graphics;2DGraphics;Development;
+MimeType=application/x-evolus-pencil;
