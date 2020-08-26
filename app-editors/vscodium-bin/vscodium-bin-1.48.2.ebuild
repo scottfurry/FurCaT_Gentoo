@@ -5,12 +5,14 @@
 EAPI=7
 
 inherit desktop eutils pax-utils xdg
-
+MY_PN="${PN/-bin}"
+MY_P="${MY_PN}-${PV}"
 MY_INSTALL_DIR="/opt/${PN}"
-MY_EXEC="codium"
+MY_EXEC="${MY_PN/vs}"
+
 DESCRIPTION="Community-driven, freely-licensed binary distribution of Microsoft’s editor VSCode"
 HOMEPAGE="https://vscodium.com/"
-SRC_URI="https://github.com/VSCodium/vscodium/releases/download/${PV}/VSCodium-linux-x64-${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/VSCodium/${MY_PN}/releases/download/${PV}/VSCodium-linux-x64-${PV}.tar.gz -> ${P}.tar.gz"
 RESTRICT="mirror strip"
 LICENSE="MIT"
 SLOT="0"
