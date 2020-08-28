@@ -17,7 +17,11 @@ RESTRICT="mirror strip"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="*"
-IUSE="libsecret hunspell"
+IUSE="libsecret hunspell +ext_vsx ext_msm"
+# IUSE specific to VSCodium:
+# ext_vsx - default - use open-vsx.org url for extension libraries
+# ext_msm - use Microsoft VSCode Marketplace url for extension libraries
+REQUIRED_USE="|| ( ext_vsx ext_msm )"
 
 DEPEND="
 	media-libs/libpng
@@ -37,13 +41,38 @@ RDEPEND="
 "
 
 src_unpack() {
-	# vscodium tarball differs from vscode-bin
-	# vscodium does not use a containing folder
-	# manual intervention required
+	# vscodium tarball differs from vscode-bin as vscodium does not use a containing folder.
+	# manual intervention required to correct.
 	install -d "${WORKDIR}/${P}"
 	S="${WORKDIR}/${P}"
 	cd "${S}" || die "cd into target directory ${S} failed"
 	unpack "${P}.tar.gz"
+}
+
+src_prepare() {
+	# NOTE - by default vscodium uses open-vsx.com for extension library.
+	# To revert to Microsoft markplace, use the 'ext_msm' use flag.
+	# See https://github.com/VSCodium/vscodium/issues/418 for explanation.
+	if $(use ext_msm); then
+		product_file="${S}/resources/app/product.json"
+		# NOTE: leading line spacing important
+		replace="  \"extensionsGallery\": {\n \
+  \"serviceUrl\": \"https://marketplace.visualstudio.com/_apis/public/gallery\",\n \
+  \"cacheUrl\": \"https://vscode.blob.core.windows.net/gallery/index\",\n \
+  \"itemUrl\": \"https://marketplace.visualstudio.com/items\"\n \
+  },"
+		# awk explanation:
+		# -v ... define awk variables and set to bash values
+		# 1st -e -> find and insert replacement before match
+		# 2nd -e -> find and removing subsequent 4 lines
+		# Inline search/replace not possible.
+		# Save to temp file and move after.
+		awk -v replace="${replace}" \
+		    -e '/extensionsGallery/{print replace}' \
+		    -e'/extensionsGallery/{n=4};n{n--; next};1' < "${product_file}" > "${product_file}.tmp"
+		mv "${product_file}.tmp" "${product_file}" || die
+	fi
+	default
 }
 
 src_install() {
@@ -72,10 +101,10 @@ src_install() {
 
 pkg_postinst() {
 	xdg_pkg_postinst
-	elog "You may install some additional utils, so check them in:"
-	elog "https://code.visualstudio.com/Docs/setup#_additional-tools"
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
 	xdg_pkg_postrm
+	xdg_icon_cache_update
 }
