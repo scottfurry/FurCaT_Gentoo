@@ -35,11 +35,9 @@ src_install() {
 	fi
 
 	fperms a+x /opt/${PN}/bin/{pycharm.sh,fsnotifier{,64},inspect.sh}
-
-	dosym ../../opt/${PN}/bin/pycharm.sh /usr/bin/${PN}
 	newicon bin/${MY_PN}.png ${PN}.png
-	make_desktop_entry ${PN} ${PN} ${PN}
-
+	dosym ../../opt/${PN}/bin/pycharm.sh /usr/bin/${PN}
+	make_desktop_entry ${PN} ${PN} ${PN} "Development;"
 	readme.gentoo_create_doc
 }
 
