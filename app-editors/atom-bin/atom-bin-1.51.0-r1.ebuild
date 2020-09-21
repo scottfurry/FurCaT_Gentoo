@@ -99,7 +99,7 @@ RDEPEND="${RDEPEND}
 	gnome-base/gconf
 	x11-libs/libnotify
 	gnome-base/gvfs
-	gnome-base/libgnome-keyring
+	app-crypt/libsecret
 	libressl? ( dev-libs/libressl:0= )
 	!libressl? (
 		dev-libs/openssl:0=
