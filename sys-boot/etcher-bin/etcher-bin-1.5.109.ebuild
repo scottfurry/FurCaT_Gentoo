@@ -4,7 +4,7 @@
 
 EAPI=7
 
-inherit desktop eutils unpacker xdg
+inherit desktop eutils unpacker pax-utils xdg
 
 MY_PN="${PN/-bin}"
 MY_INSTALL_DIR="/opt/balenaEtcher"
@@ -60,6 +60,8 @@ src_prepare() {
 }
 
 src_install() {
+    # mark source file to suppress "Unrecognized ELF" warning
+    pax-mark mr "${D%/}"/resources/app/generated/modules/node-raspberrypi-usbboot/blobs/raspberrypi/start_cd.elf
 	doins -r *
         make_wrapper "${MY_PN}" "${MY_INSTALL_DIR}/${MY_EXEC}" || die
 	# use own desktop file
@@ -77,4 +79,3 @@ pkg_postinst() {
 pkg_postrm() {
 	xdg_pkg_postrm
 }
-
