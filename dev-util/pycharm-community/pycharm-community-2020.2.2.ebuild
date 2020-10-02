@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit gnome2-utils readme.gentoo-r1 xdg
+inherit gnome2-utils readme.gentoo-r1 xdg pax-utils
 
 DESCRIPTION="Intelligent Python IDE with unique code assistance and analysis"
 HOMEPAGE="http://www.jetbrains.com/pycharm/"
@@ -25,6 +25,10 @@ QA_PREBUILT="*"
 MY_PN=${PN/-community/}
 
 src_install() {
+	# scanelf: rpath_security_checks(): Security problem with relative DT_RPATH '.:$ORIGIN' in ...
+	# pax-mark ? jbr/lib/libjcef.so
+	# pax-mark ? jbr/lib/jcef_helper
+	# pax-mark ? jbr/lib/modular-sdk/modules_libs/jcef/libjcef.so
 	insinto /opt/${PN}
 	doins -r *
 
