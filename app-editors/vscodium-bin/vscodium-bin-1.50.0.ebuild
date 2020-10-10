@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Foundation
+# Copyright 2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -7,53 +7,55 @@ EAPI=7
 inherit desktop eutils pax-utils xdg
 MY_PN="${PN/-bin}"
 MY_P="${MY_PN}-${PV}"
-MY_INSTALL_DIR="/opt/${PN}"
+MY_INSTALL_DIR="/opt/${MY_PN}"
 MY_EXEC="${MY_PN/vs}"
 
 DESCRIPTION="Community-driven, freely-licensed binary distribution of Microsoft’s editor VSCode"
 HOMEPAGE="https://vscodium.com/"
-SRC_URI="https://github.com/VSCodium/${MY_PN}/releases/download/${PV}/VSCodium-linux-x64-${PV}.tar.gz -> ${P}.tar.gz"
-RESTRICT="mirror strip"
+SRC_URI="
+	amd64? ( https://github.com/VSCodium/vscodium/releases/download/${PV}/VSCodium-linux-x64-${PV}.tar.gz )
+	arm? ( https://github.com/VSCodium/vscodium/releases/download/${PV}/VSCodium-linux-armhf-${PV}.tar.gz )
+	arm64? ( https://github.com/VSCodium/vscodium/releases/download/${PV}/VSCodium-linux-arm64-${PV}.tar.gz )"
+RESTRICT="mirror strip bindist"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="*"
-IUSE="libsecret hunspell +ext_vsx ext_msm"
+KEYWORDS="-* amd64 ~arm ~arm64"
+IUSE="+ext_vsx ext_msm"
 # IUSE specific to VSCodium:
 # ext_vsx - default - use open-vsx.org url for extension libraries
 # ext_msm - use Microsoft VSCode Marketplace url for extension libraries
-REQUIRED_USE="|| ( ext_vsx ext_msm )"
+REQUIRED_USE="
+	|| ( ext_vsx ext_msm )"
 
 DEPEND="
 	media-libs/libpng
 	>=x11-libs/gtk+-3.0
 	x11-libs/cairo
 	x11-libs/libXtst
+	!app-editors/vscodium
 "
 
 RDEPEND="
 	${DEPEND}
+	app-accessibility/at-spi2-atk
 	>=net-print/cups-2.0.0
 	x11-libs/libnotify
 	x11-libs/libXScrnSaver
 	dev-libs/nss
-	hunspell? ( app-text/hunspell )
-	libsecret? ( app-crypt/libsecret[crypt] )
+	app-crypt/libsecret[crypt]
 "
 
-src_unpack() {
-	# vscodium tarball differs from vscode-bin as vscodium does not use a containing folder.
-	# manual intervention required to correct.
-	install -d "${WORKDIR}/${P}"
-	S="${WORKDIR}/${P}"
-	cd "${S}" || die "cd into target directory ${S} failed"
-	unpack "${P}.tar.gz"
-}
+QA_PRESTRIPPED="*"
+QA_PREBUILT="opt/${MY_PN}/codium"
+
+S="${WORKDIR}"
 
 src_prepare() {
 	# NOTE - by default vscodium uses open-vsx.com for extension library.
 	# To revert to Microsoft markplace, use the 'ext_msm' use flag.
 	# See https://github.com/VSCodium/vscodium/issues/418 for explanation.
 	if $(use ext_msm); then
+		ewarn "Re-writing product file extension links"
 		product_file="${S}/resources/app/product.json"
 		# NOTE: leading line spacing important
 		replace="  \"extensionsGallery\": {\n \
@@ -76,13 +78,12 @@ src_prepare() {
 }
 
 src_install() {
-	pax-mark m "${MY_INSTALL_DIR}/${MY_EXEC}"
 	insinto "${MY_INSTALL_DIR}"
 	doins -r *
-	dosym "${MY_INSTALL_DIR}/${MY_EXEC}" "/usr/bin/${PN}"
-	make_wrapper "${PN}" "${MY_INSTALL_DIR}/${MY_EXEC}"
-	domenu ${FILESDIR}/${PN}.desktop
-	newicon ${S}/resources/app/resources/linux/code.png ${PN}.png
+	dosym "${MY_INSTALL_DIR}/${MY_EXEC}" "/usr/bin/${MY_PN}"
+	make_wrapper "${MY_PN}" "${MY_INSTALL_DIR}/${MY_EXEC}"
+	domenu "${FILESDIR}/${MY_PN}.desktop"
+	newicon "resources/app/resources/linux/code.png" ${MY_PN}.png
 
 	fperms +x "${MY_INSTALL_DIR}/${MY_EXEC}"
 	fperms 4755 "${MY_INSTALL_DIR}/chrome-sandbox"
@@ -93,10 +94,11 @@ src_install() {
 	#fix Spawn EACESS bug #25848
 	fperms +x "${MY_INSTALL_DIR}/resources/app/node_modules.asar.unpacked/vscode-ripgrep/bin/rg"
 
-	insinto "/usr/share/licenses/${PN}"
+	insinto "/usr/share/licenses/${MY_PN}"
 	for i in resources/app/LICEN*; do
 		newins "${i}" "$(basename ${i})"
 	done
+	pax-mark m "${MY_INSTALL_DIR}/${MY_EXEC}"
 }
 
 pkg_postinst() {
