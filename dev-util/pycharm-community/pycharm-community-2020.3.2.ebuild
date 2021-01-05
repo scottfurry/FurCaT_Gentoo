@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit gnome2-utils readme.gentoo-r1 xdg pax-utils
+inherit gnome2-utils readme.gentoo-r1 xdg
 
 DESCRIPTION="Intelligent Python IDE with unique code assistance and analysis"
 HOMEPAGE="http://www.jetbrains.com/pycharm/"
@@ -25,10 +25,6 @@ QA_PREBUILT="*"
 MY_PN=${PN/-community/}
 
 src_install() {
-	# scanelf: rpath_security_checks(): Security problem with relative DT_RPATH '.:$ORIGIN' in ...
-	# pax-mark ? jbr/lib/libjcef.so
-	# pax-mark ? jbr/lib/jcef_helper
-	# pax-mark ? jbr/lib/modular-sdk/modules_libs/jcef/libjcef.so
 	insinto /opt/${PN}
 	doins -r *
 
@@ -38,10 +34,18 @@ src_install() {
 		rm -r "${D}"/opt/pycharm-community/jbr/ || die
 	fi
 
+	local rub
+
+	for rub in aarch64 mips64el ppc64le; do
+		rm -r "${D}"/opt/pycharm-community/lib/pty4j-native/linux/${rub} || die
+	done
+
 	fperms a+x /opt/${PN}/bin/{pycharm.sh,fsnotifier{,64},inspect.sh}
-	newicon bin/${MY_PN}.png ${PN}.png
+
 	dosym ../../opt/${PN}/bin/pycharm.sh /usr/bin/${PN}
-	make_desktop_entry ${PN} ${PN} ${PN} "Development;"
+	newicon bin/${MY_PN}.png ${PN}.png
+	make_desktop_entry ${PN} ${PN} ${PN}
+
 	readme.gentoo_create_doc
 }
 
