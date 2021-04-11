@@ -1,15 +1,16 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+# derived from pg_overlay - http://gpo.zugaina.org/Overlays/pg_overlay
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{7..9} )
 
 DISTUTILS_OPTIONAL=1
 
 inherit distutils-r1 qmake-utils
 
-EGIT_COMMIT="ba5af8616b3a6c916e718914225a483267c01356"
+EGIT_COMMIT="32be52e555d72a46c6ac7e872e66ee01aa80aad3"
 DESCRIPTION="Hex editor library, Qt application written in C++ with Python bindings"
 HOMEPAGE="https://github.com/lancos/qhexedit2/"
 SRC_URI="https://github.com/lancos/${PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
