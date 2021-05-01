@@ -10,7 +10,7 @@ MY_PN=${PN^^}
 DESCRIPTION="Makes the illusion of embedding SQL queries in the regular C++ code"
 HOMEPAGE="http://soci.sourceforge.net/"
 # DOCUMENTATION="http://soci.sourceforge.net/doc/master/"
-SRC_URI="https://github.com/${MY_PN}/${PN}/archive/${P}.zip"
+SRC_URI="https://github.com/${MY_PN}/${PN}/archive/v${PV}.zip"
 LICENSE="Boost-1.0"
 SLOT="0"
 # 2019Nov - reported issues with building on arm7h
