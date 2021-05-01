@@ -57,6 +57,7 @@ DEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-0.4.6-metadata.patch"
+	"${FILESDIR}/${PN}-0.4.6-taskbar_mod.patch"
 )
 
 # echo $(cat po/CMakeLists.txt | grep ADD_SUBDIRECTORY | sed 's#ADD_SUBDIRECTORY( \(\w\+\) )#\1#')

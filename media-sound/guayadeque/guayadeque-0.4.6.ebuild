@@ -59,6 +59,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.5_p20170110-missing-aui-component.patch"
 	"${FILESDIR}/${P}-gcc10.patch"
 	"${FILESDIR}/${P}-metadata.patch"
+	"${FILESDIR}/${P}-taskbar_mod.patch"
 )
 
 # echo $(cat po/CMakeLists.txt | grep ADD_SUBDIRECTORY | sed 's#ADD_SUBDIRECTORY( \(\w\+\) )#\1#')
