@@ -1,16 +1,16 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-DISTUTILS_USE_SETUPTOOLS=no
-PYTHON_COMPAT=( python3_{7..9} )
+EAPI=6
+PYTHON_COMPAT=( python3_{6..8} )
 
-inherit distutils-r1
-MY_PV="${PV/_/-}"
+inherit python-single-r1 gnome2 xdg
 
 DESCRIPTION="A simple audiofile converter application for the GNOME environment"
 HOMEPAGE="https://soundconverter.org/"
-SRC_URI="https://launchpad.net/${PN}/trunk/${MY_PV}/+download/${PN}-${MY_PV}.tar.gz"
+MY_PV="${PV/_/-}"
+SRC_URI="https://launchpad.net/${PN}/trunk/${MY_PV}/+download/${PN}-${MY_PV}.tar.xz"
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -18,6 +18,7 @@ KEYWORDS="amd64 x86"
 
 IUSE="aac flac libnotify mp3 ogg opus vorbis"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
 COMMON_DEPEND="${PYTHON_DEPS}
 	dev-libs/gobject-introspection:=
 	x11-libs/gtk+:3[introspection]
@@ -29,7 +30,9 @@ COMMON_DEPEND="${PYTHON_DEPS}
 # wavenc and mp4mux come from gst-plugins-good, which everyone having base should have, so unconditional
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/pango[introspection]
-	$(python_gen_cond_dep 'dev-python/gst-python:1.0[${PYTHON_USEDEP}]')
+	$(python_gen_cond_dep '
+		dev-python/gst-python:1.0[${PYTHON_MULTI_USEDEP}]
+	')
 	libnotify? ( x11-libs/libnotify[introspection] )
 
 	media-libs/gst-plugins-base:1.0[vorbis?,ogg?]
@@ -51,9 +54,25 @@ DEPEND="${COMMON_DEPEND}
 
 RESTRICT="test" # broken pot files list in 3.0.0 release, making src_test fallback to "make test" which fails
 
-DOCS=( README.md NEWS )
+src_prepare() {
+	python_fix_shebang .
+	gnome2_src_prepare
+}
 
-python_install_all() {
-	distutils-r1_python_install_all
-	rm -vR "${D}"/usr/share/doc/"${PN}"
+src_install() {
+	export DISABLE_GSCHEMAS_COMPILED="true"
+	rm -vR "${ED}"/usr/share/doc/"${PN}"
+	rm -v "${ED}"/usr/share/glib-2.0/schemas/gschemas.compiled
+	gnome2_src_install
+	python_optimize "${ED%/}"/usr/$(get_libdir)/soundconverter/python
+}
+
+pkg_postinst() {
+	gnome2_schemas_update
+	xdg_pkg_postinst
+}
+
+pkg_postrm() {
+	gnome2_schemas_update
+	xdg_pkg_postrm
 }
