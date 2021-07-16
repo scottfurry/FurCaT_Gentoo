@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,17 +18,17 @@ if [[ ${PV} == "9999" ]] ; then
     S="${WORKDIR}/${PN}"
 else
     SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-    KEYWORDS="amd64 ~arm64 x86"
-    S="${WORKDIR}/${MY_PN}-${P}"
+    KEYWORDS="amd64 arm64 x86"
 fi
 
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
 IUSE=""
-RESTRICT="network-sandbox"
-BDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
-    dev-python/pbr[${PYTHON_USEDEP}]
+
+DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
+RDEPEND="
+	dev-python/pbr[${PYTHON_USEDEP}]
 	dev-python/random2[${PYTHON_USEDEP}]
-	dev-python/six[${PYTHON_USEDEP}]"
-DEPEND="${BDEPEND}"
-RDEPEND="${DEPEND}"
+	dev-python/six[${PYTHON_USEDEP}]
+"
+
