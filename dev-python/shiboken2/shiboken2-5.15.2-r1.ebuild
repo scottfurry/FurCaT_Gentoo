@@ -12,7 +12,9 @@ EAPI=7
 # "/usr/bin/shiboken2" at build time and "libshiboken2-*.so" at runtime.
 # TODO: Add PyPy once officially supported. See also:
 #     https://bugreports.qt.io/browse/PYSIDE-535
-PYTHON_COMPAT=( python3_{7..10} )
+# Fails to compile with python3.10
+# FAILED: libshiboken/CMakeFiles/libshiboken.dir/sbkstring.cpp.o
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit cmake llvm python-r1 toolchain-funcs
 
@@ -21,6 +23,7 @@ MY_P=pyside-setup-opensource-src-${PV}
 DESCRIPTION="Python binding generator for C++ libraries"
 HOMEPAGE="https://wiki.qt.io/PySide2"
 SRC_URI="https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${PV}-src/${MY_P}.tar.xz"
+S="${WORKDIR}/${MY_P}/sources/shiboken2"
 
 # The "sources/shiboken2/libshiboken" directory is triple-licensed under the
 # GPL v2, v3+, and LGPL v3. All remaining files are licensed under the GPL v3
@@ -28,7 +31,7 @@ SRC_URI="https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${
 # arbitrarily relicensed. (TODO)
 LICENSE="|| ( GPL-2 GPL-3+ LGPL-3 ) GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS="amd64 ~arm64 x86"
 IUSE="+docstrings numpy test vulkan"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
@@ -43,7 +46,8 @@ PATCHES=( "${FILESDIR}/${P}-qapp_fix_flag.patch" )
 # Since Clang is required at both build- and runtime, BDEPEND is omitted here.
 RDEPEND="${PYTHON_DEPS}
 	>=dev-qt/qtcore-${QT_PV}
-	>=sys-devel/clang-6:=
+	sys-devel/clang:=
+	sys-devel/clang-runtime:=
 	docstrings? (
 		>=dev-libs/libxml2-2.6.32
 		>=dev-libs/libxslt-1.1.19
@@ -57,7 +61,6 @@ DEPEND="${RDEPEND}
 	test? ( >=dev-qt/qttest-${QT_PV} )
 "
 
-S=${WORKDIR}/${MY_P}/sources/shiboken2
 DOCS=( AUTHORS )
 
 # Ensure the path returned by get_llvm_prefix() contains clang as well.
@@ -92,23 +95,17 @@ src_prepare() {
 	# eclass are defective, returning nonsensical placeholder strings if the
 	# end user has *NOT* explicitly configured their C++ compiler to be Clang.
 	# PySide2 does *NOT* care whether the end user has done so or not, as
-	# PySide2 unconditionally requires Clang in either case. This requires us
-	# to temporarily coerce the "${CPP}" environment variable identifying the
-	# current C++ compiler to "clang" immediately *BEFORE* calling such a
-	# function and then restoring that variable to its prior state immediately
-	# *AFTER* returning from that function call merely to force the
-	# clang-fullversion() function called below to return sanity. See also:
+	# PySide2 unconditionally requires Clang in either case. See also:
 	#     https://bugs.gentoo.org/619490
-	_CPP_old="$(tc-getCPP)"
-	CPP=clang
-	sed -i -e 's~(findClangBuiltInIncludesDir())~(QStringLiteral("'${EPREFIX}'/usr/lib/clang/'$(clang-fullversion)'/include"))~' \
+	sed -i -e 's~(findClangBuiltInIncludesDir())~(QStringLiteral("'${EPREFIX}'/usr/lib/clang/'$(CPP=clang clang-fullversion)'/include"))~' \
 		ApiExtractor/clangparser/compilersupport.cpp || die
-	CPP="${_CPP_old}"
 
 	cmake_src_prepare
 }
 
 src_configure() {
+	# Minimal tests for now, 2 failing with the extended version
+	# FIXME Subscripted generics cannot be used with class and instance checks
 	local mycmakeargs=(
 		-DBUILD_TESTS=$(usex test)
 		-DDISABLE_DOCSTRINGS=$(usex !docstrings)
@@ -122,7 +119,8 @@ src_configure() {
 			-DUSE_PYTHON_VERSION="${EPYTHON#python}"
 		)
 		# CMakeLists.txt expects LLVM_INSTALL_DIR as an environment variable.
-		LLVM_INSTALL_DIR="$(get_llvm_prefix)" cmake_src_configure
+		local -x LLVM_INSTALL_DIR="$(get_llvm_prefix)"
+		cmake_src_configure
 	}
 	python_foreach_impl shiboken2_configure
 }
@@ -167,5 +165,5 @@ src_install() {
 	# Remove the broken "shiboken_tool.py" script. By inspection, this script
 	# reduces to a noop. Moreover, this script raises the following exception:
 	#     FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin/../shiboken_tool.py': '/usr/bin/../shiboken_tool.py'
-	rm "${ED}"/usr/bin/shiboken_tool.py
+	rm "${ED}"/usr/bin/shiboken_tool.py || die
 }
