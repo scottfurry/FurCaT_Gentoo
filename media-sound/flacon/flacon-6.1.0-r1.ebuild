@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,7 +8,7 @@ PLOCALES="cs cs_CZ de el es es_MX et fr gl he hu id it ja_JP lt ms_MY nb nl nl_B
 # Tests require lots of disk space
 CHECKREQS_DISK_BUILD=10G
 
-inherit check-reqs cmake eutils l10n virtualx xdg
+inherit check-reqs cmake eutils plocale virtualx xdg
 
 DESCRIPTION="Extracts audio tracks from an audio CD image to separate tracks"
 HOMEPAGE="https://flacon.github.io/"
@@ -56,8 +56,8 @@ src_prepare() {
 		rm "translations/${PN}_${1}".{ts,desktop} || die
 	}
 
-	l10n_find_plocales_changes 'translations' "${PN}_" '.ts'
-	l10n_for_each_disabled_locale_do remove_locale
+	plocale_find_changes 'translations' "${PN}_" '.ts'
+	plocale_for_each_disabled_locale remove_locale
 }
 
 src_configure() {
