@@ -13,10 +13,9 @@ DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsof
 HOMEPAGE="https://vscodium.com/"
 SRC_URI="
 	amd64? ( https://github.com/VSCodium/${SHORT_PN}/releases/download/${PV}/${CAP_PN}-linux-x64-${PV}.tar.gz -> ${P}-amd64.tar.gz )
+	arm? ( https://github.com/VSCodium/${SHORT_PN}/releases/download/${PV}/${CAP_PN}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
+	arm64? ( https://github.com/VSCodium/${SHORT_PN}/releases/download/${PV}/${CAP_PN}-linux-arm64-${PV}.tar.gz -> ${P}-arm64.tar.gz )
 "
-#	arm? ( https://github.com/VSCodium/${SHORT_PN}/releases/download/${PV}/${CAP_PN}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
-#	arm64? ( https://github.com/VSCodium/${SHORT_PN}/releases/download/${PV}/${CAP_PN}-linux-arm64-${PV}.tar.gz -> ${P}-arm64.tar.gz )
-#"
 
 RESTRICT="mirror strip bindist"
 
