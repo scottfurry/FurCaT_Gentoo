@@ -1,10 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
-
+PYTHON_COMPAT=( python3_{7,8,9} )
 inherit autotools eutils python-any-r1 xdg
 
 if [[ ${PV} = *9999* ]]; then
@@ -13,8 +12,7 @@ if [[ ${PV} = *9999* ]]; then
 	KEYWORDS=""
 else
 	MY_P="HandBrake-${PV}"
-	SRC_URI="https://github.com/HandBrake/HandBrake/releases/download/${PV}/${MY_P}-source.tar.bz2 -> ${P}.tar.bz2
-		 https://download2.handbrake.fr/${PV}/${MY_P}-source.tar.bz2 -> ${P}.tar.bz2"
+	SRC_URI="https://github.com/HandBrake/HandBrake/releases/download/${PV}/${MY_P}-source.tar.bz2 -> ${P}.tar.bz2"
 	S="${WORKDIR}/${MY_P}"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -31,7 +29,7 @@ REQUIRED_USE="^^ ( fdk libav-aac )"
 RDEPEND="
 	app-arch/xz-utils
 	media-libs/speex
-	dev-libs/jansson
+	dev-libs/jansson:=
 	dev-libs/libxml2
 	media-libs/a52dec
 	media-libs/libass:=
@@ -49,6 +47,7 @@ RDEPEND="
 	media-sound/lame
 	sys-libs/zlib
 	>=media-video/ffmpeg-4.2.1:0=[postproc,fdk?]
+	<media-video/ffmpeg-4.4
 	gstreamer? (
 		media-libs/gstreamer:1.0
 		media-libs/gst-plugins-base:1.0
@@ -71,14 +70,12 @@ RDEPEND="
 		x11-libs/pango
 	)
 	fdk? ( media-libs/fdk-aac )
-	x265? ( >=media-libs/x265-3.2:0=[10bit,12bit,numa?] )
-	"
+	x265? ( >=media-libs/x265-3.2:0=[10bit,12bit,numa?] )"
 
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
-	dev-lang/yasm
-	dev-util/intltool
-	sys-devel/automake"
+	dev-lang/nasm
+	dev-util/intltool"
 
 PATCHES=(
 	# Remove libdvdnav duplication and call it on the original instead.
@@ -91,8 +88,8 @@ PATCHES=(
 	# Use whichever python is set by portage
 	"${FILESDIR}/${PN}-1.3.0-dont-search-for-python.patch"
 
-	# Fix x265 linkage... again #724650
-	"${FILESDIR}/${PN}-1.3.2-x265-link.patch"
+	# Fix x265 linkage... again again #730034
+	"${FILESDIR}/${PN}-1.3.3-x265-link.patch"
 )
 
 src_prepare() {
@@ -156,9 +153,14 @@ pkg_postinst() {
 	if use gtk ; then
 		einfo "For the GTK+ version of HandBrake, you can run \`ghb\`."
 	fi
+
 	xdg_pkg_postinst
+	xdg_icon_cache_update
+	xdg_desktop_database_update
 }
 
 pkg_postrm() {
 	xdg_pkg_postrm
+	xdg_icon_cache_update
+	xdg_desktop_database_update
 }
