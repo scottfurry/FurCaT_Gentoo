@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -39,10 +39,11 @@ QA_PREBUILT="
 	opt/${MY_PN}/*.so
 	opt/${MY_PN}/*.bin
 	opt/${MY_PN}/*.pak
-	opt/${MY_PN}/resources/app/generated/modules/*
         opt/${MY_PN}/chrome-sandbox
         opt/${MY_PN}/${MY_EXEC}
+	opt/${MY_PN}/**/*.elf
 "
+RESTRICT="strip test"
 
 src_unpack() {
 	# deb archive does not use a containing folder
@@ -60,8 +61,6 @@ src_prepare() {
 }
 
 src_install() {
-    # mark source file to suppress "Unrecognized ELF" warning
-    pax-mark mr "${D%/}"/resources/app/generated/modules/node-raspberrypi-usbboot/blobs/raspberrypi/start_cd.elf
 	doins -r *
         make_wrapper "${MY_PN}" "${MY_INSTALL_DIR}/${MY_EXEC}" || die
 	# use own desktop file
