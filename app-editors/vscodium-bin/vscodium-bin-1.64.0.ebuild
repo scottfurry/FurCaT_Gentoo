@@ -85,7 +85,7 @@ src_install() {
 	fperms +x /opt/${SHORT_PN}/{,bin/}${MIN_PN}
 	fperms +x /opt/${SHORT_PN}/chrome-sandbox
 	fperms -R +x /opt/${SHORT_PN}/resources/app/out/vs/base/node
-	fperms +x /opt/${SHORT_PN}/resources/app/node_modules.asar.unpacked/vscode-ripgrep/bin/rg
+	fperms +x /opt/${SHORT_PN}/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg
 	dosym "../../opt/${SHORT_PN}/bin/${MIN_PN}" "usr/bin/${SHORT_PN}"
 	domenu "${FILESDIR}/${SHORT_PN}.desktop"
 	domenu "${FILESDIR}/${SHORT_PN}-url-handler.desktop"
