@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>sveyret@gmail.com</email>
+		<name>Stéphane Veyret</name>
+	</maintainer>
+	<longdescription lang="en">
+		CodeLite is an open source, free, cross platform IDE specialized in C, C++,
+		PHP and JavaScript (mainly for backend developers using Node.js) programming
+		languages.
+	</longdescription>
+</pkgmetadata>
