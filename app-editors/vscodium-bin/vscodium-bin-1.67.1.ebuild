@@ -40,7 +40,7 @@ LICENSE="
 "
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm ~arm64"
-IUSE=""
+IUSE="wayland"
 
 RDEPEND="
 	app-accessibility/at-spi2-atk:2
@@ -70,6 +70,7 @@ RDEPEND="
 	x11-libs/libXrandr
 	x11-libs/libxshmfence
 	x11-libs/pango
+	wayland? ( x11-base/xwayland )
 "
 
 QA_PREBUILT="
@@ -108,8 +109,10 @@ src_install() {
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_MIN}"
 	domenu "${FILESDIR}/${PN_SHRT}.desktop"
 	domenu "${FILESDIR}/${PN_SHRT}-url-handler.desktop"
-	domenu "${FILESDIR}/${PN_SHRT}-wayland.desktop"
-	domenu "${FILESDIR}/${PN_SHRT}-url-handler-wayland.desktop"
+	if use wayland; then
+		domenu "${FILESDIR}/${PN_SHRT}-wayland.desktop"
+		domenu "${FILESDIR}/${PN_SHRT}-url-handler-wayland.desktop"
+	fi
 	newicon "resources/app/resources/linux/code.png" "${PN_SHRT}.png"
 }
 
