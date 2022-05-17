@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=etcher
-Exec=etcher %U
+Exec=etcher --no-sandbox %U
 Terminal=false
 Type=Application
 StartupNotify=true
