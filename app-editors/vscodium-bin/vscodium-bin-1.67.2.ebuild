@@ -16,6 +16,8 @@ HOMEPAGE="https://vscodium.com/"
 SRC_URI="
 	amd64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-x64-${PV}.tar.gz -> ${P}-amd64.tar.gz )
 	arm64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-arm64-${PV}.tar.gz -> ${P}-arm64.tar.gz )
+	arm? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
+
 "
 
 RESTRICT="mirror strip bindist"
@@ -40,7 +42,7 @@ LICENSE="
 "
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm ~arm64"
-IUSE="wayland"
+IUSE=""
 
 RDEPEND="
 	app-accessibility/at-spi2-atk:2
@@ -70,7 +72,6 @@ RDEPEND="
 	x11-libs/libXrandr
 	x11-libs/libxshmfence
 	x11-libs/pango
-	wayland? ( x11-base/xwayland )
 "
 
 QA_PREBUILT="
@@ -109,10 +110,6 @@ src_install() {
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_MIN}"
 	domenu "${FILESDIR}/${PN_SHRT}.desktop"
 	domenu "${FILESDIR}/${PN_SHRT}-url-handler.desktop"
-	if use wayland; then
-		domenu "${FILESDIR}/${PN_SHRT}-wayland.desktop"
-		domenu "${FILESDIR}/${PN_SHRT}-url-handler-wayland.desktop"
-	fi
 	newicon "resources/app/resources/linux/code.png" "${PN_SHRT}.png"
 }
 
@@ -120,11 +117,4 @@ pkg_postinst() {
 	xdg_pkg_postinst
 	elog "When compared to the regular VSCode, ${PN_CAPS} has a few quirks"
 	elog "More information at: https://github.com/${PN_CAPS}/${PN_SHRT}/blob/master/DOCS.md"
-	if has_version -r ">=gui-libs/wlroots-0.15"; then
-		elog
-		elog "The wayland backend of vscodium crashes with >=gui-libs/wlroots-0.15"
-		elog "This will be fixed upstream in a later release"
-		elog "Please run the xwayland version for now, on wlroots based DEs."
-		elog "For more information, see https://bugs.gentoo.org/834082"
-	fi
 }
