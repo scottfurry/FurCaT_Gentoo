@@ -1,0 +1,11 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -1375,7 +1375,7 @@ AS_IF([test -n "$GCC"], [
+         AS_IF([test "x$with_optim" != x], [
+             OPTIM="$with_optim $OPTIM"
+         ], [
+-            OPTIM="-Os $OPTIM"
++            OPTIM=" $OPTIM"
+         ])
+     ])
+ 

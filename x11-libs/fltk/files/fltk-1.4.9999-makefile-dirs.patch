@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -16,7 +16,7 @@
+ 
+ include makeinclude
+ 
+-DIRS = $(IMAGEDIRS) $(LIBDECORDIR) src $(CAIRODIR) fluid test documentation
++DIRS = $(IMAGEDIRS) $(LIBDECORDIR) src $(CAIRODIR)
+ 
+ all: makeinclude fltk-config
+ 	for dir in $(DIRS); do\
