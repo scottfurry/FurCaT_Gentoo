@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,7 +14,7 @@ EAPI=7
 #     https://bugreports.qt.io/browse/PYSIDE-535
 # Fails to compile with python3.10
 # FAILED: libshiboken/CMakeFiles/libshiboken.dir/sbkstring.cpp.o
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 
 inherit cmake llvm python-r1 toolchain-funcs
 
@@ -31,7 +31,7 @@ S="${WORKDIR}/${MY_P}/sources/shiboken2"
 # arbitrarily relicensed. (TODO)
 LICENSE="|| ( GPL-2 GPL-3+ LGPL-3 ) GPL-3"
 SLOT="0"
-KEYWORDS="amd64 ~arm64 x86"
+KEYWORDS="amd64 ~arm arm64 x86"
 IUSE="+docstrings numpy test vulkan"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
@@ -62,6 +62,11 @@ DEPEND="${RDEPEND}
 "
 
 DOCS=( AUTHORS )
+PATCHES=( 
+	"${FILESDIR}/${P}-qapp_fix_flag.patch"
+	"${FILESDIR}/${P}-python310.patch"
+)
+
 
 # Ensure the path returned by get_llvm_prefix() contains clang as well.
 llvm_check_deps() {
