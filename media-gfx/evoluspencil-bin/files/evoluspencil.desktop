@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pencil
-Exec=evoluspencil %f
+Exec=evoluspencil --disable-seccomp-filter-sandbox %f
 Terminal=false
 Type=Application
 StartupNotify=true
