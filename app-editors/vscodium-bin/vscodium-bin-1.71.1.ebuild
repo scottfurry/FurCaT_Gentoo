@@ -9,7 +9,7 @@ PN_SHRT="${PN/-bin}"
 PN_MIN="${PN_SHRT/vs}"
 PN_CAPS="${PN_SHRT/vsc/VSC}"
 # after release 1.70.1, upstream added a build number to package identification
-BLD_NUM="22245"
+BLD_NUM="22256"
 
 DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsoft's VSCode"
 HOMEPAGE="https://vscodium.com/"
