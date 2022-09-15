@@ -9,19 +9,19 @@ PN_SHRT="${PN/-bin}"
 PN_MIN="${PN_SHRT/vs}"
 PN_CAPS="${PN_SHRT/vsc/VSC}"
 # after release 1.70.1, upstream added a build number to package identification
-BLD_NUM="22256"
+REL_NUM="22258"
 
 DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsoft's VSCode"
 HOMEPAGE="https://vscodium.com/"
 # URI for 32bit arm disabled ATM
 #	arm? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
 SRC_URI="
-	amd64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${BLD_NUM}/${PN_CAPS}-linux-x64-${PV}.${BLD_NUM}.tar.gz -> 
+	amd64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${REL_NUM}/${PN_CAPS}-linux-x64-${PV}.${REL_NUM}.tar.gz -> 
 ${PVR}-amd64.tar.gz 
 )
-	arm64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${BLD_NUM}/${PN_CAPS}-linux-arm64-${PV}.${BLD_NUM}.tar.gz -> 
+	arm64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${REL_NUM}/${PN_CAPS}-linux-arm64-${PV}.${REL_NUM}.tar.gz -> 
 ${PVR}-arm64.tar.gz )
-	arm? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${BLD_NUM}/${PN_CAPS}-linux-armhf-${PV}.${BLD_NUM}.tar.gz -> 
+	arm? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${REL_NUM}/${PN_CAPS}-linux-armhf-${PV}.${REL_NUM}.tar.gz -> 
 ${PVR}-arm.tar.gz )
 
 "
