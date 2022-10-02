@@ -1,3 +1,0 @@
-libvmime-0.9.2.ebuild non-functional
-executes cmake in a recursive loop - removed ebuild for now
-
