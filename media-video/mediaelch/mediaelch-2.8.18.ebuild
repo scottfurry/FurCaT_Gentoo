@@ -1,6 +1,6 @@
 # taken from https://data.gpo.zugaina.org/bell07/media-video/mediaelch/
 
-EAPI=7
+EAPI=8
 inherit qmake-utils cmake
 
 MY_PN=MediaElch
