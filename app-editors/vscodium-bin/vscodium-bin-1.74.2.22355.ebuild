@@ -3,26 +3,23 @@
 
 EAPI=8
 
-inherit desktop pax-utils xdg
+inherit desktop pax-utils xdg optfeature
 
-PN_SHRT="${PN/-bin}"
-PN_MIN="${PN_SHRT/vs}"
-PN_CAPS="${PN_SHRT/vsc/VSC}"
+PN_SHRT="${PN/-bin}"            # vscodium
+PN_MIN="${PN_SHRT/vs}"          # codium
+PN_CAPS="${PN_SHRT/vsc/VSC}"    # VSCodium
 # after release 1.70.1, upstream added a build number to package identification
-REL_NUM="22355"
+# release number is apart of package version value "x.y.z.release"
 
 DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsoft's VSCode"
 HOMEPAGE="https://vscodium.com/"
 SRC_URI="
-	amd64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${REL_NUM}/${PN_CAPS}-linux-x64-${PV}.${REL_NUM}.tar.gz -> 
-${PN}-${PVR}-amd64.tar.gz )
-	arm64? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${REL_NUM}/${PN_CAPS}-linux-arm64-${PV}.${REL_NUM}.tar.gz -> 
-${PN}-${PVR}-arm64.tar.gz )
-	arm? ( https://github.com/VSCodium/${PN_SHRT}/releases/download/${PV}.${REL_NUM}/${PN_CAPS}-linux-armhf-${PV}.${REL_NUM}.tar.gz -> 
-${PN}-${PVR}-arm.tar.gz )
+	amd64? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-x64-${PV}.tar.gz -> ${P}-amd64.tar.gz )
+	arm? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
+	arm64? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-arm64-${PV}.tar.gz -> ${P}-arm64.tar.gz )
 "
 
-RESTRICT="mirror strip bindist"
+RESTRICT="strip bindist"
 
 LICENSE="
 	Apache-2.0
@@ -47,10 +44,11 @@ KEYWORDS="-* ~amd64 ~arm ~arm64"
 IUSE=""
 
 RDEPEND="
-	app-accessibility/at-spi2-atk:2
-	app-accessibility/at-spi2-core:2
+	|| (
+		>=app-accessibility/at-spi2-core-2.46.0:2
+		( app-accessibility/at-spi2-atk dev-libs/atk )
+	)
 	app-crypt/libsecret[crypt]
-	dev-libs/atk
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/nspr
@@ -58,6 +56,7 @@ RDEPEND="
 	media-libs/alsa-lib
 	media-libs/mesa
 	net-print/cups
+	sys-apps/util-linux
 	sys-apps/dbus
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
@@ -103,8 +102,7 @@ src_install() {
 	fperms +x /opt/${PN_SHRT}/{,bin/}${PN_MIN}
 	fperms +x /opt/${PN_SHRT}/chrome_crashpad_handler
 	fperms 4711 /opt/${PN_SHRT}/chrome-sandbox
-	fperms 755 /opt/${PN_SHRT}/resources/app/extensions/git/dist/askpass.sh
-	fperms 755 /opt/${PN_SHRT}/resources/app/extensions/git/dist/askpass-empty.sh
+	fperms 755 /opt/${PN_SHRT}/resources/app/extensions/git/dist/{askpass,git-editor}{,-empty}.sh
 	fperms -R +x /opt/${PN_SHRT}/resources/app/out/vs/base/node
 	fperms +x /opt/${PN_SHRT}/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_SHRT}"
@@ -118,4 +116,5 @@ pkg_postinst() {
 	xdg_pkg_postinst
 	elog "When compared to the regular VSCode, ${PN_CAPS} has a few quirks"
 	elog "More information at: https://github.com/${PN_CAPS}/${PN_SHRT}/blob/master/DOCS.md"
+	optfeature "keyring support inside ${PN_CAPS}" "gnome-base/gnome-keyring"
 }
