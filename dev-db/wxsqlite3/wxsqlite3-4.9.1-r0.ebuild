@@ -1,24 +1,24 @@
-# Copyright 1999-2021 Gentoo Foundation
+# Copyright 1999-2023 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-WX_GTK_VER="3.0-gtk3"
+WX_GTK_VER="3.2-gtk3"
 
-inherit autotools eutils multilib wxwidgets
+inherit autotools multilib wxwidgets
 
 DESCRIPTION="C++ wrapper around the public domain SQLite 3.x database"
 HOMEPAGE="http://utelle.github.io/wxsqlite3"
-SRC_URI="https://github.com/utelle/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/utelle/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 
 LICENSE="wxWinLL-3"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc"
 
 RDEPEND="
 	x11-libs/wxGTK:${WX_GTK_VER}[X]
-	dev-db/sqlite:3
+	>=dev-db/sqlite-3.40.0
 	doc? (
 		app-doc/doxygen[dot]
 	)"
