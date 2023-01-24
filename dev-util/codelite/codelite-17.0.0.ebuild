@@ -20,7 +20,7 @@ IUSE=""
 
 KEYWORDS="~amd64 ~x86"
 
-RDEPEND=">=x11-libs/wxGTK-3.0.0:3.0-gtk3 net-libs/libssh dev-db/sqlite:3"
+RDEPEND="x11-libs/wxGTK:3.2-gtk3 net-libs/libssh dev-db/sqlite:3"
 DEPEND="${RDEPEND}"
 BDEPEND=">=dev-util/cmake-3.16"
 

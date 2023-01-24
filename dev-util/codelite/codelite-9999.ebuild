@@ -14,16 +14,13 @@ EGIT_REPO_URI="https://github.com/eranif/${PN}"
 EGIT_SUBMODULES=('*')
 EGIT_OVERRIDE_REPO_ERANIF_CODELITE_ARCHIVE_REFS_TAGS="${PN}"
 
-#SRC_URI="https://github.com/eranif/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
-#RESTRICT="primaryuri"
-
 LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
 
 KEYWORDS="~amd64 ~x86"
 
-RDEPEND=">=x11-libs/wxGTK-3.1.6:3.1-gtk3 net-libs/libssh dev-db/sqlite:3"
+RDEPEND="x11-libs/wxGTK:3.2-gtk3 net-libs/libssh dev-db/sqlite:3"
 DEPEND="${RDEPEND}"
 BDEPEND=">=dev-util/cmake-3.16"
 
