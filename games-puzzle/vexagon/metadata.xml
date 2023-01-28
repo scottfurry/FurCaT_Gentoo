@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription lang="en">
+vexagon is a wxWidgetstile puzzle game that uses both square and hexagon tiles with different numerical bases(octal,decimal,hexadecimal).
+</longdescription>
+	<upstream>
+		<maintainer status="active">
+			<email>vexagon@furcat.ca</email>
+			<name>Scott Furry</name>
+		</maintainer>
+		<remote-id type="gitlab">digifuzzy/vexagon</remote-id>
+	</upstream>
+</pkgmetadata>
