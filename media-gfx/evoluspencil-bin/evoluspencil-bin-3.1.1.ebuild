@@ -1,17 +1,17 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit desktop eutils unpacker xdg
+inherit desktop wrapper unpacker xdg
 PN_NOBIN="${PN/-bin}"
 MY_PN="${PN_NOBIN/evolus/}"
+MY_PNC="${MY_PN/p/P}"
 MY_PV="${PV}.ga"
-MY_INSTALL_DIR="/opt/${PN_NOBIN}"
 
 DESCRIPTION="A simple GUI prototyping tool to create mockups"
 HOMEPAGE="https://pencil.evolus.vn/"
-SRC_URI="https://pencil.evolus.vn/dl/V${MY_PV}/${MY_PN}_${MY_PV}_amd64.deb"
+SRC_URI="https://pencil.evolus.vn/dl/V${MY_PV}/${MY_PNC}_${MY_PV}_amd64.deb"
 
 # bug 703602 - splitdebug - symbol clash
 RESTRICT="splitdebug mirror strip"
@@ -56,7 +56,6 @@ RDEPEND="
 "
 
 S="${WORKDIR}/${P}/${MY_PN}-${MY_PV}"
-MY_S="${S}/opt/${MY_PN}-${MY_PV}"
 
 QA_PREBUILT="
 	opt/${MY_PN}/*.so
@@ -79,25 +78,22 @@ src_prepare() {
 	# Using modified desktop file to ensure app name does not conflict
 	# Desktop file also addresses https://github.com/evolus/pencil/issues/722 and 724
 	# (Crash on app start - sandbox privilage conflict)
-	rm "${MY_S}/${MY_PN}.desktop" || die
+	rm -fR "${S}/usr/share/applications" || die
         # only contains changelog"
-        rm -rf "${MY_S}/usr/share/doc" || die
+        rm -fR "${S}/usr/share/doc" || die
+	# rename opt/Pencil folder
+	mv "opt/${MY_PNC}" "opt/${MY_PN}"
 }
 
 src_install() {
-	insinto opt/"${PN_NOBIN}"
-	doins -r "${MY_S}"/*
-	make_wrapper "${PN_NOBIN}" "${MY_INSTALL_DIR}/${MY_PN}" || die
+	doins -r *
+	make_wrapper "${PN_NOBIN}" "/opt/${MY_PN}/${MY_PN}" || die
         # use own desktop file
         domenu "${FILESDIR}/${PN_NOBIN}.desktop" || die
 
         # correct permissions of install components
-        fperms 4755 "${MY_INSTALL_DIR}/chrome-sandbox" || die
-        fperms a+x "${MY_INSTALL_DIR}/${MY_PN}" || die
-        fperms a+x "${MY_INSTALL_DIR}/natives_blob.bin" || die
-
-	# icon is 256px^2
-	newicon -s 256 "${MY_S}/${MY_PN}.png" "${PN_NOBIN}.png"
+        fperms 4755 "/opt/${MY_PN}/chrome-sandbox" || die
+        fperms a+x "/opt/${MY_PN}/${MY_PN}" || die
 }
 
 pkg_postinst() {

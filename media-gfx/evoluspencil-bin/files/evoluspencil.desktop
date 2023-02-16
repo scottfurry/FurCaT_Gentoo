@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Pencil
+Name=Evolus Pencil
 Exec=evoluspencil --disable-seccomp-filter-sandbox %f
 Terminal=false
 Type=Application
 StartupNotify=true
-Icon=evoluspencil
+Icon=pencil
 StartupWMClass=EvolusPencil
 Comment=An open-source GUI prototyping tool that is available for ALL platforms.
 Categories=Graphics;2DGraphics;Development;
