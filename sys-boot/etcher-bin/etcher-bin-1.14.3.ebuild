@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Foundation
+# Copyright 1999-2023 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,13 +6,13 @@ EAPI=8
 
 MY_PN="${PN//-bin}"
 MY_INSTALL_DIR="/opt/balenaEtcher"
-MY_EXEC="balena-${MY_PN}-electron"
+MY_EXEC="balena-${MY_PN}"
 
 inherit desktop unpacker pax-utils xdg wrapper
 
 DESCRIPTION="Flash OS images to SD cards & USB drives, safely and easily."
 HOMEPAGE="https://etcher.io/"
-SRC_URI="https://github.com/balena-io/${MY_PN}/releases/download/v${PV}/balena-${MY_PN}-electron_${PV}_amd64.deb"
+SRC_URI="https://github.com/balena-io/${MY_PN}/releases/download/v${PV}/balena-${MY_PN}_${PV}_amd64.deb"
 
 LICENSE="GPL2"
 SLOT="0"
