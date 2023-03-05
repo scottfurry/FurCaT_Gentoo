@@ -105,6 +105,7 @@ src_install() {
 	fperms 755 /opt/${PN_SHRT}/resources/app/extensions/git/dist/{askpass,git-editor}{,-empty}.sh
 	fperms -R +x /opt/${PN_SHRT}/resources/app/out/vs/base/node
 	fperms +x /opt/${PN_SHRT}/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg
+	fperms +x /opt/${PN_SHRT}/resources/app/node_modules.asar.unpacked/node-pty/build/Release/spawn-helper
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_SHRT}"
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_MIN}"
 	domenu "${FILESDIR}/${PN_SHRT}.desktop"
