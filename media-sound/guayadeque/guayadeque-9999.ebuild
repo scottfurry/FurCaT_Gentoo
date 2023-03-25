@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 WX_GTK_VER=3.0-gtk3
 
@@ -50,14 +50,13 @@ RDEPEND="
 	net-misc/curl
 	sys-apps/dbus
 	x11-libs/wxGTK:${WX_GTK_VER}[X]
-	appindicator? ( >=dev-libs/libindicate-0.7 )
+	appindicator? ( dev-libs/libindicate )
 	ipod? ( media-libs/libgpod )
 	!minimal? ( ${GST_DEPS} )"
 DEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-0.4.6-metadata.patch"
-	"${FILESDIR}/${PN}-0.4.6-taskbar_mod.patch"
 )
 
 # echo $(cat po/CMakeLists.txt | grep ADD_SUBDIRECTORY | sed 's#ADD_SUBDIRECTORY( \(\w\+\) )#\1#')

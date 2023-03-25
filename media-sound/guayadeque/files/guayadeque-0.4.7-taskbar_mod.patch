@@ -1,5 +1,5 @@
 diff --git a/src/ui/taskbar/TaskBar.cpp b/src/ui/taskbar/TaskBar.cpp
-index 879a1f12..5e3b4408 100644
+index 3259945..1d38e4f 100644
 --- a/src/ui/taskbar/TaskBar.cpp
 +++ b/src/ui/taskbar/TaskBar.cpp
 @@ -38,6 +38,7 @@ guTaskBarIcon::guTaskBarIcon( guMainFrame * NewMainFrame, guPlayerPanel * NewPla
@@ -18,13 +18,15 @@ index 879a1f12..5e3b4408 100644
      Unbind( wxEVT_MENU, &guTaskBarIcon::SendEventToMainFrame, this, ID_PLAYERPANEL_NEXTTRACK );
      Unbind( wxEVT_MENU, &guTaskBarIcon::SendEventToMainFrame, this, ID_PLAYERPANEL_NEXTALBUM );
      Unbind( wxEVT_MENU, &guTaskBarIcon::SendEventToMainFrame, this, ID_PLAYERPANEL_PREVTRACK );
-@@ -121,6 +123,9 @@ wxMenu * guTaskBarIcon::CreatePopupMenu()
-         //MenuItem->SetBitmap( guImage( guIMAGE_INDEX_player_normal_stop ) );
-         Menu->Append( MenuItem );
+@@ -123,6 +125,11 @@ wxMenu * guTaskBarIcon::CreatePopupMenu()
+ 
+         Menu->AppendSeparator();
  
 +        MenuItem = new wxMenuItem( Menu, ID_PLAYER_PLAYLIST_STOP_ATEND, _( "Stop at end" ), _( "Stop at end of current track" ) );
 +        Menu->Append( MenuItem );
 +
-         Menu->AppendSeparator();
- 
++        Menu->AppendSeparator();
++
          MenuItem = new wxMenuItem( Menu, ID_PLAYERPANEL_NEXTTRACK, _( "Next Track" ), _( "Skip to next track in current playlist" ) );
+         //MenuItem->SetBitmap( guImage( guIMAGE_INDEX_player_normal_next ) );
+         Menu->Append( MenuItem );
