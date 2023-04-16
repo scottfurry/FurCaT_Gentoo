@@ -3,7 +3,8 @@
 
 EAPI=8
 
-inherit autotools
+inherit cmake
+
 
 DESCRIPTION="Monkey's Audio Codecs"
 HOMEPAGE="https://www.monkeysaudio.com"
@@ -16,18 +17,21 @@ KEYWORDS="~amd64"
 RDEPEND=""
 DEPEND=""
 
+# No test available, Making src_test fail
+RESTRICT="test"
+
+CMAKE_BUILD_TYPE=Release
+
 src_unpack() {
 	mkdir ${S}
 	cd ${S}
 	unpack ${A}
 }
 
-src_compile() {
-	pushd Source/Projects/NonWindows
-	emake prefix=${EPREFIX}/usr libdir=${EPREFIX}/usr/$(get_libdir)
+src_prepare() {
+	cmake_src_prepare
 }
 
-src_install() {
-	pushd Source/Projects/NonWindows
-	emake DESTDIR=${ED} prefix=${EPREFIX}/usr libdir=${EPREFIX}/usr/$(get_libdir) install
+src_configure() {
+	cmake_src_configure
 }
