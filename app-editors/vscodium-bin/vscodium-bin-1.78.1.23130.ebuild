@@ -8,14 +8,17 @@ inherit desktop pax-utils xdg optfeature
 PN_SHRT="${PN/-bin}"            # vscodium
 PN_MIN="${PN_SHRT/vs}"          # codium
 PN_CAPS="${PN_SHRT/vsc/VSC}"    # VSCodium
-# after release 1.70.1, upstream added a build number to package identification
+# After release 1.70.1, upstream added a build number to package identification
 # release number is apart of package version value "x.y.z.release"
-
+#
+# After release 1.78.1.23130, upstream no longer producing 32bit releases
+#
+# After release 1.78.1.23130, upstream has a different mechanism for initiating terminal
+#
 DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsoft's VSCode"
 HOMEPAGE="https://vscodium.com/"
 SRC_URI="
 	amd64? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-x64-${PV}.tar.gz -> ${P}-amd64.tar.gz )
-	arm? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
 	arm64? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-arm64-${PV}.tar.gz -> ${P}-arm64.tar.gz )
 "
 
@@ -40,7 +43,7 @@ LICENSE="
 	W3C
 "
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm ~arm64"
+KEYWORDS="-* ~amd64 ~arm64"
 IUSE=""
 
 RDEPEND="
@@ -76,6 +79,7 @@ RDEPEND="
 "
 
 QA_PREBUILT="
+	/opt/${PN_SHRT}/bin/code-tunnel
 	/opt/${PN_SHRT}/chrome_crashpad_handler
 	/opt/${PN_SHRT}/chrome-sandbox
 	/opt/${PN_SHRT}/${PN_MIN}
@@ -92,8 +96,8 @@ QA_PREBUILT="
 S="${WORKDIR}"
 
 src_install() {
-	# Cleanup
-	rm "${S}/resources/app/LICENSE.txt" || die
+	# Disable update server
+	sed -e "/updateUrl/d" -i ./resources/app/product.json || die
 
 	# Install
 	pax-mark m "${PN_MIN}"
@@ -105,7 +109,7 @@ src_install() {
 	fperms 755 /opt/${PN_SHRT}/resources/app/extensions/git/dist/{askpass,git-editor}{,-empty}.sh
 	fperms -R +x /opt/${PN_SHRT}/resources/app/out/vs/base/node
 	fperms +x /opt/${PN_SHRT}/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg
-	fperms +x /opt/${PN_SHRT}/resources/app/node_modules.asar.unpacked/node-pty/build/Release/spawn-helper
+	dosym "../../opt/${PN_SHRT}/bin/code-tunnel" "usr/bin/code-tunnel"
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_SHRT}"
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_MIN}"
 	domenu "${FILESDIR}/${PN_SHRT}.desktop"
