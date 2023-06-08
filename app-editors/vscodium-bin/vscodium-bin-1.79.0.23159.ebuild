@@ -12,6 +12,7 @@ PN_CAPS="${PN_SHRT/vsc/VSC}"    # VSCodium
 # release number is apart of package version value "x.y.z.release"
 #
 # After release 1.78.1.23130, upstream no longer producing 32bit releases
+# Restored in release 1.79.0.23159
 #
 # After release 1.78.1.23130, upstream has a different mechanism for initiating terminal
 #
@@ -19,6 +20,7 @@ DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsof
 HOMEPAGE="https://vscodium.com/"
 SRC_URI="
 	amd64? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-x64-${PV}.tar.gz -> ${P}-amd64.tar.gz )
+	arm? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-armhf-${PV}.tar.gz -> ${P}-arm.tar.gz )
 	arm64? ( https://github.com/${PN_CAPS}/${PN_SHRT}/releases/download/${PV}/${PN_CAPS}-linux-arm64-${PV}.tar.gz -> ${P}-arm64.tar.gz )
 "
 
@@ -43,7 +45,7 @@ LICENSE="
 	W3C
 "
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm64"
+KEYWORDS="-* ~amd64 arm ~arm64"
 IUSE=""
 
 RDEPEND="
