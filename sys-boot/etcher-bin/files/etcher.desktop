@@ -1,11 +1,10 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=etcher
-Exec=etcher --no-sandbox %U
+Exec=etcher %U
 Terminal=false
 Type=Application
-StartupNotify=true
 Icon=balena-etcher
 StartupWMClass=balenaEtcher
 Comment=Flash OS images to SD cards and USB drives, safely and easily.
-Categories=System;
+MimeType=x-scheme-handler/etcher;
+Categories=Utility;

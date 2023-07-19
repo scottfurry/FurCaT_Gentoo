@@ -80,9 +80,10 @@ src_install() {
 
 	doins -r *
 	# correct permissions of install components
+        fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}" || die
+        fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}.bin" || die
+        fperms a+x "${MY_INSTALL_DIR}/chrome_crashpad_handler" || die
 	fperms 4711 "${MY_INSTALL_DIR}/chrome-sandbox" || die
-	fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}" || die
-	fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}.bin" || die
 
         make_wrapper "${MY_PN}" "${MY_INSTALL_DIR}/${MY_EXEC}" || die
 	# use own desktop file
