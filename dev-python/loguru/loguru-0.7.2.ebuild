@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{9..12} )
 
 inherit distutils-r1
 
@@ -13,10 +13,7 @@ HOMEPAGE="
 	https://github.com/Delgan/loguru/
 	https://pypi.org/project/loguru/
 "
-SRC_URI="
-	https://github.com/Delgan/loguru/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+SRC_URI="https://github.com/Delgan/loguru/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
