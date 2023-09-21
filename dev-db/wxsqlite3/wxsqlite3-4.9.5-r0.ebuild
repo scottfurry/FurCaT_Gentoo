@@ -18,7 +18,7 @@ IUSE="doc"
 
 RDEPEND="
 	x11-libs/wxGTK:${WX_GTK_VER}[X]
-	>=dev-db/sqlite-3.40.0
+	>=dev-db/sqlite-3.43.1
 	doc? (
 		app-doc/doxygen[dot]
 	)"
