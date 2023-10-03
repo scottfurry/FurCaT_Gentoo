@@ -1,54 +1,33 @@
-# taken from https://data.gpo.zugaina.org/bell07/media-video/mediaelch/
-
+# taken from https://data.gpo.zugaina.org/salfter/media-video/mediaelch/
 EAPI=8
-inherit qmake-utils cmake
-
-MY_PN=MediaElch
-S=$WORKDIR/$MY_PN-$PV
+inherit qmake-utils
 
 DESCRIPTION="Video metadata scraper"
-HOMEPAGE="http://www.mediaelch.de/"
-
-IUSE="debug"
-
-if [[ ${PV} == *9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/Komet/MediaElch"
-	EGIT_BRANCH="master"
-	EGIT_SUBMODULES=()
-	inherit git-r3
-	S="${WORKDIR}/mediaelch-9999"
-else
-	RESTRICT="mirror"
-	SRC_URI="https://github.com/Komet/$MY_PN/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64"
-fi
-
+# tarball produced with this command:
+# docker run "-v${PWD}:/a" devsisters/tarballize https://github.com/Komet/MediaElch v$PV
+SRC_URI="https://alfter.us/wp-content/uploads/2023/07/$P.tar.xz"
+S=$WORKDIR/v$PV
+HOMEPAGE="https://www.kvibes.de/mediaelch/"
 
 SLOT="0"
 LICENSE="LGPL-3"
+KEYWORDS="amd64 x86"
 
-DEPEND=">=dev-util/cmake-3.15
-	dev-libs/quazip
-	dev-qt/qtconcurrent:5
-	dev-qt/qtmultimedia:5[widgets]
-	dev-qt/qtsql:5
-	dev-qt/qtsvg:5
-	dev-qt/qtxmlpatterns:5
+DEPEND="dev-qt/qtquickcontrols:5
 	dev-qt/qtcore:5
-	dev-qt/qtgui:5
 	media-video/mediainfo
-	media-libs/libzen
-	media-libs/phonon"
+	dev-qt/qtmultimedia:5[widgets]
+	dev-qt/qtdeclarative:5
+	dev-qt/qtopengl:5
+	dev-qt/qtsvg:5"
 
-CMAKE_BUILD_TYPE=Release
+src_configure()
+{
+  cd $S
+  eqmake5
+}
 
-src_configure() {
-	local mycmakeargs=("-DUSE_EXTERN_QUAZIP=ON")
-	if use debug; then
-		CMAKE_BUILD_TYPE=Debug
-		mycmakeargs+=("-DSANITIZE_ADDRESS=on")
-		CXXFLAGS+=("-fsanitize=address")
-	fi
-
-	cmake_src_configure
+src_install()
+{
+  emake install INSTALL_ROOT=$D
 }
