@@ -1,24 +1,21 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# derived from https://data.gpo.zugaina.org/src_prepare-overlay/sys-boot/rpi-imager/rpi-imager-9999.ebuild
 
 EAPI=8
 
 inherit xdg cmake optfeature
 
 DESCRIPTION="Raspberry Pi Imaging Utility"
-HOMEPAGE="https://github.com/raspberrypi/rpi-imager"
-
-if [[ "${PV}" == *9999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/raspberrypi/${PN}.git"
-else
-	SRC_URI="https://github.com/raspberrypi/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64"
-fi
-
+HOMEPAGE="https://www.raspberrypi.com/software/"
+SRC_URI="https://github.com/raspberrypi/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+KEYWORDS="~amd64 ~aarch64"
 LICENSE="Apache-2.0"
 SLOT="0"
+
 CMAKE_USE_DIR="${S}/src"
+CMAKE_BUILD_TYPE="Release"
 
 BDEPEND="
 	dev-qt/linguist-tools
