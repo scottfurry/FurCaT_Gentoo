@@ -5,6 +5,7 @@
 EAPI=8
 
 MY_PN="${PN//-bin}"
+MY_INSTALL_DIR="/opt/balenaEtcher"
 MY_EXEC="balena-${MY_PN}"
 
 inherit desktop unpacker pax-utils xdg wrapper
@@ -48,41 +49,51 @@ RDEPEND="
 	x11-libs/pango
 "
 S="${WORKDIR}/${P}"
-MY_INSTALL_DIR="/usr/lib/balena-etcher"
 
 QA_PREBUILT="
-	"${MY_INSTALL_DIR}/chrome-sandbox"
+	"${MY_INSTALL_DIR}"/chrome-sandbox
 	"${MY_INSTALL_DIR}/${MY_EXEC}"
-	"${MY_INSTALL_DIR}/libEGL.so"
-	"${MY_INSTALL_DIR}/libffmpeg.so"
-	"${MY_INSTALL_DIR}/libGLESv2.so"
-	"${MY_INSTALL_DIR}/libvk_swiftshader.so"
-	"${MY_INSTALL_DIR}/libvulkan.so.1"
+	"${MY_INSTALL_DIR}/${MY_EXEC}.bin"
+	"${MY_INSTALL_DIR}"/libEGL.so
+	"${MY_INSTALL_DIR}"/libffmpeg.so
+	"${MY_INSTALL_DIR}"/libGLESv2.so
+	"${MY_INSTALL_DIR}"/libvk_swiftshader.so
+	"${MY_INSTALL_DIR}"/libvulkan.so*
+	"${MY_INSTALL_DIR}"/swiftshader/libEGL.so
+	"${MY_INSTALL_DIR}"/swiftshader/libGLESv2.so
 "
 RESTRICT="mirror strip test"
 
 src_unpack() {
 	# deb archive does not use a containing folder
 	# manual intervention required
-	install -d "${S}"
+        install -d "${S}"
 	cd "${S}" || die "cd into target directory ${S} failed"
 	unpack_deb "${A}"
 }
 
 src_install() {
+	# remove upstream provided desktop file
+        rm usr/share/applications/${MY_EXEC}.desktop || die
 	# only contains changelog"
 	rm -rf usr/share/doc || die
-    # debain specific
-    rm -fR usr/share/lintian || die
 
 	doins -r *
 	# correct permissions of install components
-	fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}" || die
-	fperms a+x "${MY_INSTALL_DIR}/chrome_crashpad_handler" || die
-	fperms a+x "${MY_INSTALL_DIR}/libEGL.so" || die
-	fperms a+x "${MY_INSTALL_DIR}/libffmpeg.so" || die
-	fperms a+x "${MY_INSTALL_DIR}/libGLESv2.so" || die
-	fperms a+x "${MY_INSTALL_DIR}/libvk_swiftshader.so" || die
-	fperms a+x "${MY_INSTALL_DIR}/libvulkan.so.1" || die
+        fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}" || die
+        fperms a+x "${MY_INSTALL_DIR}/${MY_EXEC}.bin" || die
+        fperms a+x "${MY_INSTALL_DIR}/chrome_crashpad_handler" || die
 	fperms 4711 "${MY_INSTALL_DIR}/chrome-sandbox" || die
+
+        make_wrapper "${MY_PN}" "${MY_INSTALL_DIR}/${MY_EXEC}" || die
+	# use own desktop file
+	domenu "${FILESDIR}/${MY_PN}.desktop" || die
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
 }
