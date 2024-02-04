@@ -1,0 +1,14 @@
+<!--
+ Source: Written from scratch for sunset-repo overlay 
+-->
+<pkgmetadata>
+<maintainer type="person">
+<email>sunsetsergal@gmail.com</email>
+</maintainer>
+<upstream>
+<remote-id type="github">complexlogic/rsgain</remote-id>
+</upstream>
+<longdescription lang="en">
+rsgain (really simple gain) is a ReplayGain 2.0 command line utility for Windows, macOS, Linux, and BSD. rsgain applies loudness metadata tags to your files, while leaving the audio stream untouched. A ReplayGain-compatible player will dynamically adjust the volume of your tagged files during playback.
+</longdescription>
+</pkgmetadata>
