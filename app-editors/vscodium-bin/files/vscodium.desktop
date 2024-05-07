@@ -2,7 +2,7 @@
 Name=VSCodium
 Comment=Editing evolved
 GenericName=Code Editor
-Exec=/usr/bin/vscodium --unity-launch %F
+Exec=/usr/bin/vscodium %F
 Icon=vscodium
 Type=Application
 StartupNotify=false
