@@ -45,7 +45,8 @@ LICENSE="
 	W3C
 "
 SLOT="0"
-KEYWORDS="-* ~amd64 arm ~arm64"
+KEYWORDS="-* ~amd64"
+# disabled KEYWORDS="arm arm64"
 IUSE=""
 
 RDEPEND="
