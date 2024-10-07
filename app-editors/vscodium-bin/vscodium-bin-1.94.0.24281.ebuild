@@ -111,7 +111,6 @@ src_install() {
 	fperms 4711 /opt/${PN_SHRT}/chrome-sandbox
 	fperms 755 /opt/${PN_SHRT}/resources/app/extensions/git/dist/{askpass,git-editor}{,-empty}.sh
 	fperms -R +x /opt/${PN_SHRT}/resources/app/out/vs/base/node
-	fperms +x /opt/${PN_SHRT}/resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg
 	dosym "../../opt/${PN_SHRT}/bin/code-tunnel" "usr/bin/code-tunnel"
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_SHRT}"
 	dosym "../../opt/${PN_SHRT}/bin/${PN_MIN}" "usr/bin/${PN_MIN}"
