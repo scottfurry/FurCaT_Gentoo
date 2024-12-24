@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 
 inherit cmake python-single-r1 xdg
 
@@ -15,7 +15,7 @@ if [[ "${PV}" = *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/whoozle/android-file-transfer-linux.git"
 else
 	SRC_URI="https://github.com/whoozle/android-file-transfer-linux/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="amd64 ~x86"
 fi
 
 LICENSE="LGPL-2.1"
