@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: wxwidgets.eclass
@@ -23,7 +23,8 @@
 #
 # Taken from pg_overlay
 # https://github.com/gentoo-mirror/pg_overlay/blob/master/eclass/wxwidgets.eclass
-#
+# 7615fdbaf9155a32b1c5ebeece8285131fc97021
+# with local modification
 
 case ${EAPI} in
 	7|8) ;;
@@ -47,7 +48,7 @@ case ${WX_GTK_VER} in
 		fi
 		;;
 	"") die "WX_GTK_VER not declared" ;;
-	*)  die "Invalid WX_GTK_VER: must be set to a valid wxGTK SLOT ('3.0/3.1/3.2' or '3.0-gtk3/3.1-gtk3/3.2-gtk3')" ;;
+	*)  die "Invalid WX_GTK_VER: must be set to a valid wxGTK SLOT ('3.0/3.2' or '3.0-gtk3/3.2-gtk3')" ;;
 esac
 readonly WX_GTK_VER
 
@@ -71,8 +72,8 @@ setup-wxwidgets() {
 	local w wxtoolkit wxconf
 
 	case ${WX_GTK_VER} in
-		3.0-gtk3|3.2-gtk3)	wxtoolkit=gtk3 ;;
-		3.0|3.2)			wxtoolkit=gtk2
+		3.0-gtk3|3.2-gtk3)  wxtoolkit=gtk3 ;;
+		3.0|3.2)            wxtoolkit=gtk2
 							eqawarn "This package relies on the deprecated GTK 2 slot, which will go away soon (https://bugs.gentoo.org/618642)"
 							;;
 	esac
@@ -85,6 +86,8 @@ setup-wxwidgets() {
 	if has_version -d "x11-libs/wxGTK:${WX_GTK_VER}[aqua]"; then
 		wxtoolkit="mac"
 	elif ! has_version -d "x11-libs/wxGTK:${WX_GTK_VER}[X]"; then
+		wxtoolkit="base"
+	elif ! has_version -d "x11-libs/wxGTK:${WX_GTK_VER}"[gui]; then
 		wxtoolkit="base"
 	fi
 
