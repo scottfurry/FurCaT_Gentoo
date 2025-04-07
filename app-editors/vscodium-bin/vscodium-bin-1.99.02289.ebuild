@@ -8,13 +8,13 @@ inherit desktop pax-utils xdg optfeature
 PN_SHRT="${PN/-bin}"            # vscodium
 PN_MIN="${PN_SHRT/vs}"          # codium
 PN_CAPS="${PN_SHRT/vsc/VSC}"    # VSCodium
-# After release 1.70.1, upstream added a build number to package identification
-# release number is apart of package version value "x.y.z.release"
-#
-# After release 1.78.1.23130, upstream no longer producing 32bit releases
-# Restored in release 1.79.0.23159
-#
-# After release 1.78.1.23130, upstream has a different mechanism for initiating terminal
+# Feature #2299 - change package versioning
+# From Commit:
+# The new version number use the standard MAJOR.MINOR.PATCH.
+# But our patch number will be constructed as:
+#    <VSCode's patch number><time based between 0 and 9999>
+# VSCode has never released more than 5 patches so the max patch number is
+#    5 so we can keep our patch number under 65,535.
 #
 DESCRIPTION="A community-driven, freely-licensed binary distribution of Microsoft's VSCode"
 HOMEPAGE="https://vscodium.com/"
