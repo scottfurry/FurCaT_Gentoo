@@ -1,5 +1,7 @@
-# Copyright 2022 Gentoo Authors
+# Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Taken from repository: slonko (https://slonko.net/portage)
 
 EAPI=8
 
@@ -7,7 +9,7 @@ MY_PROG="${P}-1"
 
 DESCRIPTION="Epson scanner management utility"
 HOMEPAGE="https://support.epson.net/linux/en/epsonscan2.php"
-SRC_URI="https://download3.ebz.epson.net/dsc/f/03/00/16/14/37/7577ee65efdad48ee2d2f38d9eda75418e490552/${MY_PROG}.src.tar.gz"
+SRC_URI="https://download3.ebz.epson.net/dsc/f/03/00/17/08/06/1babf9876ebb16956420a601b92ee28b57cd7db7/${MY_PROG}.src.tar.gz"
 S="${WORKDIR}/${MY_PROG}"
 
 inherit cmake desktop udev
@@ -38,6 +40,9 @@ PATCHES=(
 	"${FILESDIR}/0002-Fix-crash.patch"
 	"${FILESDIR}/0003-Use-XDG-open-to-open-the-directory.patch"
 	"${FILESDIR}/0004-Fix-a-crash-on-an-OOB-container-access.patch"
+	"${FILESDIR}/0005-Fix-folder-creation-crash.patch"
+	"${FILESDIR}/0006-Fix-cmath-ref.patch"
+	"${FILESDIR}/0007-Fix-desktop-deprecated.patch"
 )
 
 src_prepare() {

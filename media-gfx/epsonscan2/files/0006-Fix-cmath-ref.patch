@@ -1,0 +1,17 @@
+Correct Build Error - missing header
+Pacakge will fail pointing to file GrayToMono.hpp citing symbol 'pow' not understood.
+Symbol is defined C std header math.h. Header used elsewhere in package but missing in this file.
+---
+
+diff --git a/src/Controller/Src/Filter/GrayToMono.hpp b/src/Controller/Src/Filter/GrayToMono.hpp
+index 0eec964..4c45990 100755
+--- a/src/Controller/Src/Filter/GrayToMono.hpp
++++ b/src/Controller/Src/Filter/GrayToMono.hpp
+@@ -17,6 +17,7 @@
+ //  GrayToMono.hpp -- template and derived ESC/I ESC/I-2 protocol commands
+ 
+ #include <utils/ESBuffer.h>
++#include <math.h>
+ #include "ESCommonTypedef.h"
+ #include "ESImageInfo.h"
+ #include "EpsonScan2.h"
